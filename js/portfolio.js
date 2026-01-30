@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.getElementById('portfolio-grid');
     const filtersContainer = document.getElementById('filters');
@@ -10,12 +9,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         portfolioData = await response.json();
     } catch (error) {
         console.error('Error loading portfolio data:', error);
-        grid.innerHTML = '<p>حدث خطأ في تحميل البيانات.</p>';
+        grid.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">عذراً، حدث خطأ في تحميل البيانات.</p>';
         return;
     }
 
     // 2. Render Categories
-    if (portfolioData.categories) {
+    if (portfolioData.categories && filtersContainer) {
+        filtersContainer.innerHTML = '<button class="filter-btn active" data-filter="all">الكل</button>';
+
         portfolioData.categories.forEach(cat => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
@@ -24,110 +25,209 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.onclick = () => filterItems(cat.id);
             filtersContainer.appendChild(btn);
         });
+
+        filtersContainer.querySelector('[data-filter="all"]').onclick = () => filterItems('all');
     }
 
-    // 3. Check URL Params for Initial Filter
-    const params = window.appParams || new URLSearchParams(window.location.search);
-    const initialCategory = params.get('category'); // e.g., ?category=collage
-
-    // 4. Render Items
+    // 3. Initial Render
     renderItems(portfolioData.items);
 
-    // 5. Apply Initial Filter if present
+    // 4. Check URL Params
+    const params = new URLSearchParams(window.location.search);
+    const initialCategory = params.get('category');
     if (initialCategory) {
         filterItems(initialCategory);
     }
 
     // --- Helper Functions ---
 
-    // --- Lightbox Logic ---
-    const lightbox = document.createElement('div');
-    lightbox.id = 'lightbox';
-    lightbox.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-        background: rgba(0,0,0,0.9); z-index: 2000; display: none; 
-        justify-content: center; align-items: center; padding: 2rem;
-        backdrop-filter: blur(10px);
-    `;
-    lightbox.innerHTML = `
-        <button id="lb-close" style="position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: white; font-size: 2rem; cursor: pointer;">&times;</button>
-        <div class="lb-content" style="max-width: 90%; max-height: 90%; text-align: center;">
-            <img id="lb-img" src="" style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
-            <h2 id="lb-title" style="color: white; margin-top: 1rem;"></h2>
-            <p id="lb-desc" style="color: #ccc;"></p>
-        </div>
-    `;
-    document.body.appendChild(lightbox);
-
-    lightbox.querySelector('#lb-close').onclick = () => {
-        lightbox.style.display = 'none';
-        document.body.style.overflow = 'auto'; // Enable scroll
-    };
-
-    lightbox.onclick = (e) => {
-        if (e.target === lightbox) {
-            lightbox.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    };
-
-    function openLightbox(item) {
-        document.getElementById('lb-img').src = item.image;
-        document.getElementById('lb-title').textContent = item.title;
-        document.getElementById('lb-desc').textContent = item.description || '';
-        lightbox.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Disable scroll
-    }
-
     function renderItems(items) {
         grid.innerHTML = '';
         if (items.length === 0) {
-            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">لا توجد أعمال في هذا القسم حالياً.</p>';
+            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #888;">لا توجد أعمال في هذا القسم حالياً.</p>';
             return;
         }
 
         items.forEach((item, index) => {
-            const el = document.createElement('div');
-            el.className = 'portfolio-item glass scale-in';
-            el.style.animationDelay = `${index * 100}ms`;
+            const card = document.createElement('div');
+            card.className = 'portfolio-card fade-up';
+            card.style.animationDelay = `${index * 50}ms`;
 
-            el.innerHTML = `
-                <img src="${item.image}" alt="${item.title}" loading="lazy">
-                <div class="item-overlay">
-                    <h3>${item.title}</h3>
-                    <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">القسم: ${item.category}</p>
+            const isVideo = item.type === 'video';
+
+            // Auto-convert Google Drive Thumbnail Links (Robust Version)
+            let imageSrc = item.thumbnail || item.image || 'imgs/placeholder.jpg';
+            if (imageSrc) {
+                let driveId = null;
+                if (imageSrc.includes('/d/')) {
+                    driveId = imageSrc.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+                } else if (imageSrc.includes('id=')) {
+                    driveId = imageSrc.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
+                }
+
+                if (driveId && (imageSrc.includes('google.com') || imageSrc.includes('drive'))) {
+                    // Use lh3 domain for faster/stable image loading
+                    imageSrc = `https://lh3.googleusercontent.com/d/${driveId}`;
+                }
+            }
+
+            card.innerHTML = `
+                <div class="card-image-wrapper" style="position: relative; cursor: pointer;">
+                    <img src="${imageSrc}" alt="${item.title}" class="card-image">
+                    ${isVideo ? `
+                    <div class="play-icon" style="
+                        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        width: 60px; height: 60px; background: rgba(255, 0, 51, 0.9);
+                        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                        box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); pointer-events: none;
+                        transition: transform 0.3s ease;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="margin-left: 4px;">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                    ` : ''}
+                </div>
+                <div class="card-content">
+                    <div class="card-category">${getCategoryName(item.category)}</div>
+                    <div class="card-title">${item.title}</div>
+                    <p style="color: #aaa; font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">${item.description || ''}</p>
                 </div>
             `;
 
-            // Add click to open lightbox
-            el.onclick = () => openLightbox(item);
+            card.querySelector('.card-image-wrapper').onclick = () => openLightbox(item);
+            grid.appendChild(card);
 
-            grid.appendChild(el);
+            const wrapper = card.querySelector('.card-image-wrapper');
+            const playIcon = wrapper.querySelector('.play-icon');
+            if (playIcon) {
+                wrapper.onmouseenter = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                wrapper.onmouseleave = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1)';
+            }
         });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        grid.querySelectorAll('.portfolio-card').forEach(el => observer.observe(el));
+    }
+
+    function getCategoryName(catId) {
+        const cat = portfolioData.categories.find(c => c.id === catId);
+        return cat ? cat.title : catId;
     }
 
     function filterItems(category) {
-        // Update Buttons UI
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.filter === category);
-            if (category === 'all' && btn.dataset.filter === 'all') btn.classList.add('active');
         });
 
-        // Update Grid
-        if (category === 'all' || !category) {
-            renderItems(portfolioData.items);
-            // Update URL without reloading (optional, nice for sharing)
-            const url = new URL(window.location);
-            url.searchParams.delete('category');
-            window.history.pushState({}, '', url);
-        } else {
-            const filtered = portfolioData.items.filter(item => item.category === category);
-            renderItems(filtered);
+        const filtered = (category === 'all')
+            ? portfolioData.items
+            : portfolioData.items.filter(item => item.category === category);
 
-            // Update URL
-            const url = new URL(window.location);
-            url.searchParams.set('category', category);
-            window.history.pushState({}, '', url);
+        renderItems(filtered);
+
+        const url = new URL(window.location);
+        if (category === 'all') url.searchParams.delete('category');
+        else url.searchParams.set('category', category);
+        window.history.pushState({}, '', url);
+    }
+
+    // --- Lightbox Logic ---
+    let lightbox = document.getElementById('lightbox');
+    if (!lightbox) {
+        lightbox = document.createElement('div');
+        lightbox.id = 'lightbox';
+        lightbox.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); z-index: 5000; display: none; 
+            justify-content: center; align-items: center; padding: 0;
+            backdrop-filter: blur(15px); opacity: 0; transition: opacity 0.3s ease;
+        `;
+        lightbox.innerHTML = `
+            <button id="lb-close" style="position: absolute; top: 2rem; right: 2rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 5001;">&times;</button>
+            <div id="lb-content-wrapper" style="width: 90%; max-width: 1000px; aspect-ratio: 16/9; position: relative;"></div>
+            <div id="lb-details" style="position: absolute; bottom: 2rem; left: 0; width: 100%; text-align: center; pointer-events: none;">
+                <h3 id="lb-title" style="color: white; font-family: 'Cairo'; margin-bottom: 0.5rem; text-shadow: 0 2px 10px black;"></h3>
+            </div>
+        `;
+        document.body.appendChild(lightbox);
+
+        const closeBtn = lightbox.querySelector('#lb-close');
+        const closeLb = () => {
+            lightbox.style.opacity = '0';
+            setTimeout(() => {
+                lightbox.style.display = 'none';
+                document.getElementById('lb-content-wrapper').innerHTML = '';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        };
+        closeBtn.onclick = closeLb;
+        lightbox.onclick = (e) => { if (e.target === lightbox) closeLb(); };
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+    }
+
+    function openLightbox(item) {
+        const wrapper = document.getElementById('lb-content-wrapper');
+        const title = document.getElementById('lb-title');
+
+        wrapper.innerHTML = '';
+        title.textContent = item.title;
+
+        if (item.type === 'video' && item.videoUrl) {
+            let videoSrc = item.videoUrl;
+
+            // Auto-convert Google Drive Video and Thumbnail Links
+            if (videoSrc.includes('google.com') || videoSrc.includes('drive')) {
+                let driveId = null;
+                if (videoSrc.includes('/d/')) {
+                    driveId = videoSrc.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+                } else if (videoSrc.includes('id=')) {
+                    driveId = videoSrc.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
+                }
+
+                if (driveId) {
+                    videoSrc = `https://drive.google.com/file/d/${driveId}/preview`;
+                }
+            }
+            // Youtube Check
+            else if (videoSrc.includes('youtube') || videoSrc.includes('youtu.be')) {
+                let videoId = '';
+                if (videoSrc.includes('embed')) videoId = videoSrc.split('embed/')[1];
+                else if (videoSrc.includes('watch?v=')) videoId = videoSrc.split('v=')[1].split('&')[0];
+                else videoId = videoSrc.split('/').pop();
+                videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            }
+
+            wrapper.innerHTML = `
+                <iframe width="100%" height="100%" src="${videoSrc}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);"></iframe>
+            `;
+
+        } else {
+            // Image Fallback
+            let imgSrc = item.image || item.thumbnail;
+            if (imgSrc && (imgSrc.includes('google.com') || imgSrc.includes('drive'))) {
+                let driveId = null;
+                if (imgSrc.includes('/d/')) {
+                    driveId = imgSrc.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+                } else if (imgSrc.includes('id=')) {
+                    driveId = imgSrc.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
+                }
+                if (driveId) imgSrc = `https://drive.google.com/uc?export=view&id=${driveId}`;
+            }
+            wrapper.innerHTML = `
+                <img src="${imgSrc}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+            `;
         }
+
+        lightbox.style.display = 'flex';
+        lightbox.offsetHeight;
+        lightbox.style.opacity = '1';
+        document.body.style.overflow = 'hidden';
     }
 });

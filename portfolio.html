@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>معرض الأعمال | ديفيد مايكل</title>
+    <title>معرض الأعمال | David Michael Naim</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,10 +76,10 @@
             box-shadow: 0 10px 20px rgba(255, 0, 51, 0.2);
         }
 
+        /* Masonry Grid Layout */
         .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
+            column-count: 3;
+            column-gap: 2rem;
             padding-bottom: 4rem;
         }
 
@@ -90,7 +90,11 @@
             overflow: hidden;
             transition: all 0.4s ease;
             position: relative;
-            group: cursor;
+            break-inside: avoid;
+            /* Important for Masonry */
+            margin-bottom: 2rem;
+            /* Spacing for columns */
+            cursor: pointer;
         }
 
         .portfolio-card:hover {
@@ -101,9 +105,33 @@
 
         .card-image {
             width: 100%;
-            aspect-ratio: 16/9;
             object-fit: cover;
+            /* Maintain aspect ratio naturally */
+            display: block;
+            /* Fix vertical gap */
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+
+        }
+
+        .card-image:hover {
+            opacity: 0.7;
+        }
+
+        /* Play Icon Hover Effects */
+        .card-image-wrapper:hover .play-icon {
+            transform: translate(-50%, -50%) scale(1.1) !important;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6) !important;
+            /* background: rgba(0, 0, 0, 0.8) !important; */
+            /* Darken bg to make gold pop */
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card-image-wrapper:hover .play-icon svg {
+            fill: #FFD700 !important;
+            filter: drop-shadow(0 0 8px #FFD700);
+            transition: all 0.3s ease;
         }
 
         .card-content {
@@ -126,9 +154,15 @@
             letter-spacing: 1px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .portfolio-grid {
-                grid-template-columns: 1fr;
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .portfolio-grid {
+                column-count: 1;
                 padding: 0 1rem 4rem;
             }
 
@@ -329,7 +363,8 @@
     <footer class="glass"
         style="margin-top: 0; padding: 2rem; text-align: center; border-top: 1px solid #111; position: relative; z-index: 10; background: #000;">
         <div class="container">
-            <p style="font-size: 0.9rem; color: #555; font-family: 'Cairo';">© 2026 ديفيد مايكل. جميع الحقوق محفوظة.</p>
+            <p style="font-size: 0.9rem; color: #555; font-family: 'Cairo';">© 2026 David Michael Naim. جميع الحقوق
+                محفوظة.</p>
         </div>
     </footer>
 

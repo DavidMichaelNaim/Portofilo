@@ -24,24 +24,84 @@
     "items": [
         {
             "id": 1,
-            "title": "مشروع عقاري فاخر",
-            "category": "realestate",
-            "image": "imgs/portfolio/placeholder.jpg",
-            "description": "فيديو ترويجي لمشروع سكني في الرياض"
+            "title": "حديقة حي العنود",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: حديقة حي العنود",
+            "thumbnail": "https://drive.google.com/file/d/1hkfdmT7f1pZwD3YnXkeyslPWyi6JxsVs/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1UggQq5Thya7HYbOQyYF65C8sJ9TqEzLa/view?usp=sharing"
         },
         {
             "id": 2,
-            "title": "إعلان مكتب محاماة",
-            "category": "law",
-            "image": "imgs/portfolio/placeholder.jpg",
-            "description": "موشن جرافيك تعريفي بخدمات قانونية"
+            "title": "شركه تسديد لخدمات الدفع و الشحن",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: شركه تسديد لخدمات الدفع و الشحن",
+            "thumbnail": "https://drive.google.com/file/d/1OVqEG1MP49TOxBcHpDQZEvrgU5hYXIb6/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1ImZcUqOW4A88dHsGryRxxLAJk0TbsCS4/view?usp=sharing"
         },
         {
             "id": 3,
-            "title": "تصميم كولاج فني",
-            "category": "collage",
-            "image": "imgs/portfolio/placeholder.jpg",
-            "description": "عمل فني بأسلوب الكولاج الرقمي"
+            "title": "المطايب",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: المطايب",
+            "thumbnail": "https://drive.google.com/file/d/1a0M9e2RTt5ryYADLa5TSy3SZGbOfs1Dx/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1J2bZ9Vwy2vyAsmUAhwpWYqCw1TUWiu9x/view?usp=sharing"
+        },
+        {
+            "id": 4,
+            "title": "فعالية برمج مع روبوت",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: فعالية برمج مع روبوت",
+            "thumbnail": "https://drive.google.com/file/d/1tya0oJjHw78AaLuLGH0zwQOlB3xOHUBN/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1KaCZDMbpHFTl7JrNCpLjdq8EZwQ4iAyP/view?usp=sharing"
+        },
+        {
+            "id": 5,
+            "title": "مطعم هرمان",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: مطعم هرمان",
+            "thumbnail": "https://drive.google.com/file/d/18MivM2u4RMEx2_8X2VNUziYjLro6kNm4/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1L7FP6I9mvMLy2qoQRIoUeNR3oqft6PCR/view?usp=sharing"
+        },
+        {
+            "id": 6,
+            "title": "مكتب أسفار للسفر والسياحة",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: مكتب أسفار للسفر والسياحة",
+            "thumbnail": "https://drive.google.com/file/d/1BKFX73tAc9koXbmCYpRB5j9f9N5R2fNi/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/13uYdEDqSButh-4c-jRz6fLJUnBUmXvXh/view?usp=sharing"
+        },
+        {
+            "id": 7,
+            "title": "مخطط الدار النموذجي",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: مخطط الدار النموذجي",
+            "thumbnail": "https://drive.google.com/file/d/1cV71gtqep802_ZobbE3LtXyrEZfJnGTF/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1hVume-MPZYrhQp4qXO5f0gT3RpShDlAb/view?usp=sharing"
+        },
+        {
+            "id": 8,
+            "title": "متجر آرك استور",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: متجر آرك استور",
+            "thumbnail": "https://drive.google.com/file/d/1uIRQeDq6WtGH3935TkWKnko2gHz8I9Vm/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1cKu0K-9JdD6z2Ow57xHdt4YdRgm1KSEj/view?usp=sharing"
+        },
+        {
+            "id": 9,
+            "title": "Oneplus",
+            "category": "commercial",
+            "type": "video",
+            "description": "Video project: Oneplus",
+            "thumbnail": "https://drive.google.com/file/d/1NIH2jH1Wr7WgWwhN_EWzRlf8HSpg1vv2/view?usp=sharing",
+            "videoUrl": "https://drive.google.com/file/d/1376RA_TaDxVGbTziz7jxcfUyfmyxfhtp/view?usp=sharing"
         }
     ]
 }
