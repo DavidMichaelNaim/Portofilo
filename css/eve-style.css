@@ -1,0 +1,264 @@
+/* EVE KAYSER STYLE - REPLICA */
+
+/* 1. Dark Cinematic Background */
+body {
+    background-color: #050505 !important;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(255, 0, 51, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+    overflow-x: hidden;
+}
+
+/* 2. Hero Section Layout */
+.eve-hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    /* Text (Right) gets more space */
+    align-items: center;
+    padding: 0 5%;
+    position: relative;
+    padding-top: 80px;
+}
+
+/* Image fading into darkness */
+.eve-image-container {
+    height: 90vh;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+}
+
+.eve-image {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    /* Fade the bottom edge into transparency */
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.5)) grayscale(20%);
+    transition: all 0.5s ease;
+}
+
+/* 3. Typography & Text Area */
+.eve-content {
+    padding-right: 5%;
+    z-index: 2;
+    text-align: right;
+    /* RTL */
+    position: relative;
+}
+
+.eve-label {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    display: inline-block;
+    position: relative;
+}
+
+.eve-headline {
+    font-size: 4.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: white;
+    margin-bottom: 2rem;
+    font-family: 'Cairo', sans-serif;
+}
+
+.eve-headline span {
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+.eve-grid-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border: 1px dashed rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotateGrid 60s linear infinite;
+}
+
+@keyframes rotateGrid {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* 4. Floating Skills (Orbiting Pills) */
+.orbit-skill {
+    position: absolute;
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    color: #ccc;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.orbit-skill img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Positioning Orbitting Skills */
+.os-1 {
+    top: -20%;
+    right: 10%;
+    animation: float 6s infinite ease-in-out;
+}
+
+.os-2 {
+    top: 30%;
+    left: -10%;
+    animation: float 8s infinite reverse ease-in-out;
+}
+
+.os-3 {
+    bottom: 0%;
+    right: 20%;
+    animation: float 7s infinite 1s ease-in-out;
+}
+
+.os-4 {
+    top: 0%;
+    left: 10%;
+    animation: float 9s infinite 2s ease-in-out;
+}
+
+/* 5. The "Happy to Chat" Button */
+.whatsapp-pill {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+}
+
+.whatsapp-pill span {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.whatsapp-icon-circle {
+    background: #25D366;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-size: 1.2rem;
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-pill:hover {
+    background: #222;
+    transform: translateY(-2px);
+    border-color: #25D366;
+}
+
+/* 6. Experience List (Numbered) */
+.exp-list-item {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    align-items: flex-start;
+    transition: all 0.3s ease;
+}
+
+.exp-list-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+    padding-right: 1rem;
+    /* RTL hover effect */
+}
+
+.exp-number {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    color: #333;
+    background: #111;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.exp-list-item:hover .exp-number {
+    color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.exp-details h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.exp-details p {
+    color: #888;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .eve-hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 120px;
+    }
+
+    .eve-content {
+        text-align: center;
+        padding-right: 0;
+        order: 1;
+    }
+
+    .eve-image-container {
+        height: 60vh;
+        order: 2;
+        justify-content: center;
+    }
+
+    .eve-image {
+        mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    }
+
+    .eve-headline {
+        font-size: 3rem;
+    }
+
+    .orbit-skill {
+        display: none;
+        /* Hide floating skills on mobile for cleanliness */
+    }
+}

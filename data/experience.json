@@ -1,0 +1,31 @@
+{
+    "experience": [
+        {
+            "role": "Motion Graphics Designer",
+            "company": "Freelance",
+            "duration": "7 Years",
+            "type": "Remote",
+            "description": "عملت كمستقل لمدة 7 سنوات، حيث قمت بتنفيذ مشاريع متنوعة وعالية الجودة. تركزت 95% من أعمالي في السوق السعودي، مما أكسبني خبرة عميقة في الذوق العام ومتطلبات هذا السوق."
+        },
+        {
+            "role": "Motion Graphics Designer",
+            "company": "Remote Company",
+            "duration": "1 Year",
+            "type": "Full-time",
+            "description": "عملت لمدة عام كامل عن بعد مع شركة متخصصة، بجانب عملي الحر، مما صقل مهاراتي في العمل الجماعي والالتزام بالمواعيد النهائية الصارمة."
+        }
+    ],
+    "skills": [
+        "After Effects",
+        "Premiere Pro",
+        "Illustrator",
+        "Blender",
+        "InDesign",
+        "Photoshop"
+    ],
+    "social": {
+        "instagram": "https://www.instagram.com/davidmichaelnaim/",
+        "behance": "https://www.behance.net/devedmecheel",
+        "facebook": "https://www.facebook.com/DavidMichaelNaim"
+    }
+}

@@ -1,0 +1,76 @@
+/* Responsive Design */
+
+@media (max-width: 1024px) {
+    h1 {
+        font-size: 3.5rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+        /* Stack layout on tablets */
+        text-align: center;
+    }
+
+    .hero-text {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-text p {
+        border-left: none;
+        border-top: 3px solid var(--gold);
+        padding-left: 0;
+        padding-top: 1rem;
+    }
+
+    .hero-image {
+        order: 1;
+        height: 50vh;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .nav-links {
+        display: none;
+        /* Mobile Menu to be implemented */
+    }
+
+    .grid-3 {
+        grid-template-columns: 1fr;
+        /* Stack cards on mobile */
+    }
+
+    .experience-item {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 95%;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}

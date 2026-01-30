@@ -1,0 +1,71 @@
+/* Marquee / Ticker Tape Animation */
+.marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee-content {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.marquee-content span {
+    margin: 0 2rem;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(50%);
+    }
+
+    /* RTL moves right */
+}
+
+/* Mega Buttons */
+.btn-mega {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-whatsapp {
+    background-color: #25D366;
+    color: white;
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+}
+
+.btn-whatsapp:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(37, 211, 102, 0.5);
+}
+
+.btn-portfolio {
+    background-color: var(--accent);
+    color: white;
+    box-shadow: 0 10px 20px rgba(217, 4, 41, 0.3);
+}
+
+.btn-portfolio:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(217, 4, 41, 0.5);
+}
+
+/* Typography Enhancements */
+.hero-title {
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ديفيد مايكل - مصمم موشن جرافيك</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Outfit:wght@400;700;900&family=Tajawal:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/social-buttons.css">
+    <link rel="stylesheet" href="css/eve-style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+        /* ======= GLOBAL RESETS & SCROLLBAR ======= */
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ======= EVE KAYSER NAVBAR ======= */
+        .eve-navbar {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            width: auto;
+        }
+
+        .nav-pill {
+            background: rgba(20, 25, 30, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 60px;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.3rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            color: #aaa;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+            background: rgba(255, 0, 51, 0.1);
+        }
+
+        .nav-link.nav-cta {
+            background: var(--accent);
+            color: white;
+            margin-right: 0.3rem;
+        }
+
+        .nav-link.nav-cta:hover {
+            background: #cc0033;
+            transform: scale(1.05);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(20, 25, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 0.8rem;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            margin-right: 15px;
+            /* RTL spacing */
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* ======= ORBIT EXPERIENCE SECTION ======= */
+        .orbit-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #030303 0%, #080808 100%);
+            overflow: hidden;
+            padding: 6rem 0;
+        }
+
+        /* Background Rings */
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .orbit-ring.ring-1 {
+            width: 450px;
+            height: 450px;
+            border: 1px dashed rgba(255, 180, 50, 0.2);
+        }
+
+        .orbit-ring.ring-2 {
+            width: 700px;
+            height: 700px;
+            border: 1px solid rgba(255, 100, 50, 0.1);
+        }
+
+        /* Central Text */
+        .orbit-text-wrapper {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .orbit-main-number {
+            font-family: 'Cairo', sans-serif;
+            font-size: clamp(4rem, 12vw, 9rem);
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            margin: 0 0 1rem 0;
+        }
+
+        .orbit-main-number span {
+            color: var(--accent);
+        }
+
+        .orbit-sub-text {
+            font-family: 'Cairo', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.4);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .orbit-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800;
+            color: white;
+            margin: 0;
+        }
+
+        /* Floating Badges - BIGGER */
+        .floating-badge {
+            position: absolute;
+            background: rgba(25, 35, 40, 0.95);
+            border: 1px solid rgba(255, 180, 50, 0.3);
+            padding: 1rem 1.8rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #ddd;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            z-index: 20;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-badge img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        /* Animation */
+        @keyframes floatBadge {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .fb-1 {
+            top: 18%;
+            right: 12%;
+            animation: floatBadge 5s ease-in-out infinite;
+        }
+
+        .fb-2 {
+            top: 40%;
+            left: 8%;
+            animation: floatBadge 6s ease-in-out infinite 0.5s;
+        }
+
+        .fb-3 {
+            bottom: 30%;
+            right: 10%;
+            animation: floatBadge 7s ease-in-out infinite 1s;
+        }
+
+        .fb-4 {
+            bottom: 18%;
+            left: 15%;
+            animation: floatBadge 5.5s ease-in-out infinite 1.5s;
+        }
+
+        .fb-5 {
+            top: 10%;
+            left: 22%;
+            animation: floatBadge 6.5s ease-in-out infinite 2s;
+        }
+
+        /* Orbiting Pulse Dot */
+        .orbit-dot-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 450px;
+            height: 450px;
+            transform: translate(-50%, -50%);
+            animation: orbitSpin 12s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes orbitSpin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .pulse-dot {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pulse-dot::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background: #FFB432;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #FFB432, 0 0 40px rgba(255, 180, 50, 0.6);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.7;
+            }
+        }
+
+        /* Experience List Arabic Style */
+        .exp-list-item {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+
+        .exp-list-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+            padding-right: 2.5rem;
+        }
+
+        .exp-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            color: #444;
+            background: #111;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .exp-list-item:hover .exp-number {
+            color: var(--accent);
+            background: rgba(255, 0, 51, 0.1);
+        }
+
+        .exp-details h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .exp-details p {
+            color: #777;
+            font-size: 1rem;
+            margin: 0;
+            line-height: 1.7;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* ======= HERO CTA BUTTONS ======= */
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-btn-primary {
+            background: linear-gradient(135deg, var(--accent), #a0001e);
+            color: white;
+            box-shadow: 0 10px 25px rgba(255, 0, 51, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 0, 51, 0.5);
+        }
+
+        .hero-btn-whatsapp {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-btn-whatsapp svg {
+            color: #25D366;
+            /* Official WhatsApp Green */
+            transition: transform 0.3s ease;
+        }
+
+        .hero-btn-whatsapp:hover {
+            background: rgba(37, 211, 102, 0.1);
+            border-color: #25D366;
+            transform: translateY(-3px);
+        }
+
+        .hero-btn-whatsapp:hover svg {
+            transform: scale(1.2);
+        }
+
+        /* ======= ROBUST RESPONSIVE STYLES ======= */
+        @media screen and (max-width: 900px) {
+            .eve-hero {
+                grid-template-columns: 1fr;
+                padding-top: 80px;
+                text-align: center;
+                height: auto;
+                min-height: auto;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .eve-content {
+                order: 2;
+                padding: 0 0 3rem;
+            }
+
+            .eve-image-container {
+                order: 1;
+                margin-bottom: 2rem;
+                display: flex;
+                justify-content: center;
+                height: auto;
+                /* Reset fixed height from desktop */
+                align-items: center;
+                /* Center image instead of bottom alignment */
+            }
+
+            .eve-image {
+                max-width: 70%;
+                height: auto;
+            }
+
+            .hero-cta-group {
+                justify-content: center !important;
+            }
+
+            .eve-headline {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+
+            /* Navbar Mobile */
+            .eve-navbar {
+                width: 100%;
+                top: 0;
+                left: 0;
+                transform: none;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 1.5rem;
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent);
+                pointer-events: none;
+                /* Let clicks pass through empty space */
+            }
+
+            .eve-navbar>* {
+                pointer-events: auto;
+            }
+
+            /* Re-enable clicks on children */
+
+            .mobile-menu-btn {
+                display: flex;
+                margin: 0;
+            }
+
+            .nav-pill {
+                position: absolute;
+                top: 70px;
+                right: 1.5rem;
+                flex-direction: column;
+                width: 220px;
+                padding: 1.5rem;
+                border-radius: 20px;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                background: rgba(15, 20, 25, 0.98);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-pill.open {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .nav-link {
+                display: block;
+                /* Show in menu */
+                text-align: center;
+                padding: 0.8rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                font-size: 1.1rem;
+            }
+
+            .nav-link:last-child {
+                border-bottom: none;
+                margin-top: 1rem;
+            }
+
+            /* Orbit Section Mobile - SIMPLIFIED */
+            .orbit-section {
+                padding: 4rem 1rem;
+                height: auto;
+                min-height: auto;
+                overflow: hidden;
+                flex-direction: column;
+            }
+
+            .orbit-ring,
+            .orbit-dot-wrapper {
+                opacity: 0.2;
+                /* Dim rings on mobile */
+                width: 280px !important;
+                height: 280px !important;
+            }
+
+            .orbit-text-wrapper {
+                margin-bottom: 3rem;
+            }
+
+            .orbit-main-number {
+                font-size: 3.5rem;
+            }
+
+            /* Remove float animation on mobile to prevent overflow/mess */
+            .floating-badge {
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+                animation: none !important;
+                display: inline-flex;
+                margin: 5px;
+            }
+
+            .orbit-section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                /* Space between text and badges */
+            }
+
+            /* Wrap badges in a container flow */
+            .orbit-section::after {
+                content: "";
+                display: none;
+            }
+
+            /* IMPORTANT: Override inline styles */
+            .fb-1,
+            .fb-2,
+            .fb-3,
+            .fb-4,
+            .fb-5 {
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                animation: none !important;
+            }
+
+            /* Flex layout for badges container logic */
+            .active-badges-mobile-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+                max-width: 400px;
+            }
+
+            /* Pulse dot */
+            .pulse-dot {
+                display: none;
+            }
+
+            /* Experience Mobile */
+            .exp-list-item {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.5rem 1rem;
+            }
+
+            .exp-list-item:hover {
+                padding-right: 1rem;
+                /* Disable hover shift on mobile */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .eve-headline {
+                font-size: 1.8rem;
+            }
+
+            .hero-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.9rem;
+            }
+
+            .floating-badge {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+
+        /* Contact Section */
+        /* Updated WhatsApp Button (Matching Top) */
+        .hero-btn-large {
+            padding: 1.5rem 3rem;
+            font-size: 1.4rem;
+        }
+
+        /* Improved Social Buttons */
+        .social-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link svg {
+            width: 30px;
+            height: 30px;
+            transition: all 0.4s ease;
+            z-index: 2;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            transform: translateY(100%);
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .social-link:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(255, 0, 51, 0.3);
+        }
+
+        .social-link:hover::before {
+            transform: translateY(0);
+        }
+
+        .social-link:hover svg {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
+
+        @media (max-width: 768px) {
+            .hero-btn-large {
+                width: 100%;
+                font-size: 1.1rem;
+                padding: 1.2rem;
+            }
+
+            .social-link {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body class="dark-theme">
+
+    <!-- Navbar - Eve Kayser Style (Centered Pill) -->
+    <nav class="eve-navbar">
+        <!-- Mobile Menu Button -->
+        <div class="mobile-menu-btn" onclick="document.querySelector('.nav-pill').classList.toggle('open')">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-pill">
+            <a href="#hero" class="nav-link active">الرئيسية</a>
+            <a href="#skills" class="nav-link">الخبرة</a>
+            <a href="#contact" class="nav-link">تواصل</a>
+            <a href="portfolio.html" class="nav-link">أعمالي</a>
+            <a href="#contact" class="nav-link nav-cta">ابدأ مشروعك ↗</a>
+        </div>
+    </nav>
+
+    <!-- 1. HERO SECTION -->
+    <section class="eve-hero" id="hero">
+        <div class="eve-grid-bg"></div>
+        <div class="eve-content fade-up delay-100">
+            <div class="eve-label" style="font-family: 'Cairo'; letter-spacing: 0;">مصمم وخبير موشن جرافيك</div>
+            <h1 class="eve-headline">
+                خدمات موشن جرافيك<br>
+                <span>بمستوى الوكالات العالمية</span><br>
+                لكن بأسعار مستقل.
+            </h1>
+            <p
+                style="color: #aaa; font-size: 1.2rem; line-height: 1.9; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; font-family: 'Tajawal';">
+                أساعدك في تصميم وتحريك هوية بصرية تجذب جمهورك. خبرة أكثر من 7 سنوات في السوق السعودي، أصنع محتوى يروي
+                قصتك ببراعة.
+            </p>
+            <!-- Hero CTA Buttons -->
+            <div class="hero-cta-group" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <!-- Primary: Portfolio -->
+                <a href="portfolio.html" class="hero-btn hero-btn-primary">
+                    <span>شاهد أعمالي</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </a>
+                <!-- Secondary: WhatsApp -->
+                <a href="https://wa.me/201153754767" target="_blank" class="hero-btn hero-btn-whatsapp">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    <span>تواصل واتساب</span>
+                </a>
+            </div>
+        </div>
+        <div class="eve-image-container fade-up">
+            <img src="imgs/me2.png" alt="ديفيد مايكل" class="eve-image">
+        </div>
+    </section>
+
+    <!-- 2. ORBIT EXPERIENCE SECTION (Arabic) -->
+    <section class="orbit-section" id="skills">
+        <!-- Background Rings -->
+        <div class="orbit-ring ring-1"></div>
+        <div class="orbit-ring ring-2"></div>
+
+        <!-- Central Text (Arabic) -->
+        <div class="orbit-text-wrapper">
+            <p class="orbit-main-number"><span>+7</span> سنوات</p>
+            <p class="orbit-sub-text">من الخبرة في</p>
+            <p class="orbit-title">الموشن جرافيك</p>
+        </div>
+
+        <!-- Badges Wrapper for Mobile Flexing -->
+        <div class="active-badges-mobile-container" style="display: contents;">
+            <div class="floating-badge fb-1">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="Ae">
+                after effects
+            </div>
+            <div class="floating-badge fb-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Pr">
+                premiere pro
+            </div>
+            <div class="floating-badge fb-3">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Ai">
+                illustrator
+            </div>
+            <div class="floating-badge fb-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Ps">
+                photoshop
+            </div>
+            <div class="floating-badge fb-5">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Blender_logo_no_text.svg/960px-Blender_logo_no_text.svg.png"
+                    alt="Blender" style="height: 26px;">
+                blender
+            </div>
+        </div>
+
+        <!-- Orbiting Pulse Dot -->
+        <div class="orbit-dot-wrapper">
+            <div class="pulse-dot"></div>
+        </div>
+    </section>
+
+    <!-- 3. EXPERIENCE SECTION (Arabic) -->
+    <section id="experience" class="section-padding" style="position: relative; z-index: 5; background: #000;">
+        <div class="container" style="max-width: 900px;">
+            <div style="text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #222;">
+                <h2 style="font-size: 2.5rem; font-family: 'Cairo'; margin: 0; color: white;">الخبرات العملية</h2>
+            </div>
+
+            <div class="exp-list">
+                <div class="exp-list-item fade-up">
+                    <div class="exp-number">01</div>
+                    <div class="exp-details">
+                        <h3>7 سنوات عمل حر</h3>
+                        <p>خبرة ممتدة كمصمم مستقل (Freelancer)، مع تقديم خدمات لأكثر من 100 شركة وستارت أب في السعودية
+                            والخليج.</p>
+                    </div>
+                </div>
+                <div class="exp-list-item fade-up delay-100">
+                    <div class="exp-number">02</div>
+                    <div class="exp-details">
+                        <h3>شركات عن بعد</h3>
+                        <p>العمل مع وكالات إبداعية كبرى عن بعد، والمساهمة في حملات إعلانية بصرية ضخمة على مستوى عالمي.
+                        </p>
+                    </div>
+                </div>
+                <div class="exp-list-item fade-up delay-200">
+                    <div class="exp-number">03</div>
+                    <div class="exp-details">
+                        <h3>التخصصات</h3>
+                        <p>موشن جرافيك احترافي، هوية بصرية متكاملة، إعلانات وسوشيال ميديا، تصميم UI/UX.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. CONTACT SECTION (Arabic) -->
+    <section id="contact"
+        style="padding: 8rem 0; text-align: center; background: radial-gradient(circle at center, #0a0a0a 0%, #000 70%); position: relative;">
+        <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(37,211,102,0.05) 0%, transparent 70%); pointer-events: none;">
+        </div>
+        <div class="container">
+            <h2 class="fade-up"
+                style="font-size: 3rem; margin-bottom: 1rem; font-family: 'Cairo'; font-weight: 800; color: white;">جاهز
+                نبدأ مشروع جديد؟</h2>
+            <p class="fade-up" style="color: #888; font-size: 1.3rem; margin-bottom: 4rem; font-family: 'Tajawal';">أنا
+                متاح حالياً لاستقبال الطلبات والمشاريع الإبداعية.</p>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 2.5rem;">
+                <!-- Bottom WhatsApp CTA (Sync with Hero) -->
+                <a href="https://wa.me/201153754767" target="_blank" class="hero-btn hero-btn-whatsapp hero-btn-large">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    <span>تواصل واتساب فوراً</span>
+                </a>
+
+                <!-- Social Links -->
+                <div class="social-buttons">
+                    <a href="https://www.behance.net/devedmecheel" target="_blank" class="social-link behance"
+                        title="بيهانس">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14h-8.027c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988h-6.466v-14.967h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zm-3.466-8.988h3.584c2.508 0 2.906-3-.312-3h-3.272v3zm3.391 3h-3.391v3.016h3.341c3.055 0 2.868-3.016.05-3.016z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/davidmichaelnaim/" target="_blank" class="social-link instagram"
+                        title="انستجرام">
+                        <svg viewBox="0 0 448 512" fill="currentColor">
+                            <path
+                                d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.facebook.com/DavidMichaelNaim" target="_blank" class="social-link facebook"
+                        title="فيسبوك">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass" style="margin-top: 0; padding: 2rem; text-align: center; border-top: 1px solid #111;">
+        <div class="container">
+            <p style="font-size: 0.9rem; color: #555; font-family: 'Cairo';">© 2026 ديفيد مايكل. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/theme.js"></script>
+    <script>
+        /* ===============================
+           Intersection Observer Animations
+        ================================ */
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Animate once
+                    }
+                });
+            },
+            {
+                threshold: 0.18 // Trigger when 15% visible
+            }
+        );
+
+        document
+            .querySelectorAll('.fade-up, .scale-in')
+            .forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>

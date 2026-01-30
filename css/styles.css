@@ -1,0 +1,247 @@
+:root,
+[data-theme='dark'],
+[data-theme='light'] {
+    /* PERMANENT DARK MODE - Luxury Red & Gold */
+    --bg-primary: #000000;
+    /* Pure Black */
+    --bg-secondary: #0a0a0a;
+    /* Slightly lighter black */
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+
+    /* Luxury Accents - More Vibrant */
+    --accent: #FF0033;
+    /* BOLD Red */
+    --accent-hover: #cc0029;
+    --gold: #FFD700;
+    /* Bright Gold */
+    --gold-hover: #FFC700;
+
+    --glass-bg: rgba(10, 10, 10, 0.85);
+    --glass-border: rgba(255, 215, 0, 0.2);
+    /* Gold border */
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.8);
+    --shadow-lg: 0 20px 40px -5px rgba(255, 0, 51, 0.4);
+    /* Strong red glow */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Tajawal', 'Inter', sans-serif;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+    direction: rtl;
+    text-align: right;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Outfit', 'Cairo', sans-serif;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 4.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+
+/* Gold Underline for Headlines */
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    right: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 2px;
+}
+
+p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* Utilities */
+.container {
+    width: 90%;
+    max-width: 1400px;
+    /* Wider container for modern look */
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 0;
+    /* Sharper edges for modern feel */
+}
+
+.btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border-radius: 0;
+    /* Sharp edges */
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: none;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(255, 0, 51, 0.6);
+    /* Strong red glow */
+}
+
+/* Gold Button Variant */
+.btn-gold {
+    background-color: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-gold:hover {
+    background-color: var(--gold);
+    color: #000;
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+}
+
+.section-padding {
+    padding: 6rem 0;
+    /* Increased padding */
+}
+
+/* --- Skill Cards & Glow Effects --- */
+/* --- Skill Cards & Glow Effects --- */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    /* Slightly wider minimum */
+    gap: 2.5rem;
+    /* Increased gap */
+    padding: 2rem 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.skill-card {
+    background: rgba(20, 20, 20, 0.6);
+    /* Slightly darker, more opaque */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+    /* Rounder corners */
+    padding: 2.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy transition */
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.skill-card img {
+    width: 64px;
+    height: 64px;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+    transition: transform 0.4s ease;
+}
+
+.skill-card h3 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+}
+
+/* Glow on Hover */
+.skill-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.skill-card:hover img {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Brand Specific Glows */
+.skill-ae:hover {
+    box-shadow: 0 10px 30px -5px rgba(153, 153, 248, 0.6);
+}
+
+/* Purple */
+.skill-pr:hover {
+    box-shadow: 0 10px 30px -5px rgba(153, 153, 248, 0.6);
+}
+
+/* Purple */
+.skill-ai:hover {
+    box-shadow: 0 10px 30px -5px rgba(255, 154, 0, 0.6);
+}
+
+/* Orange */
+.skill-ps:hover {
+    box-shadow: 0 10px 30px -5px rgba(49, 168, 255, 0.6);
+}
+
+/* Blue */
+.skill-id:hover {
+    box-shadow: 0 10px 30px -5px rgba(255, 51, 102, 0.6);
+}
+
+/* Pink */
+.skill-bl:hover {
+    box-shadow: 0 10px 30px -5px rgba(232, 117, 34, 0.6);
+}
+
+/* Orange/Blender */

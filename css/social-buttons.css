@@ -1,0 +1,194 @@
+/* Social Media Buttons - Bold & Prominent */
+.social-buttons {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.social-btn:hover {
+    transform: translateY(-8px) scale(1.1);
+}
+
+/* Behance - Blue */
+.social-btn.behance {
+    background: linear-gradient(135deg, #1769ff 0%, #0050e6 100%);
+    box-shadow: 0 8px 20px rgba(23, 105, 255, 0.3);
+}
+
+.social-btn.behance:hover {
+    box-shadow: 0 12px 30px rgba(23, 105, 255, 0.5);
+    border-color: #1769ff;
+}
+
+/* Instagram - Gradient */
+.social-btn.instagram {
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    box-shadow: 0 8px 20px rgba(225, 48, 108, 0.3);
+}
+
+.social-btn.instagram:hover {
+    box-shadow: 0 12px 30px rgba(225, 48, 108, 0.5);
+    border-color: #e6683c;
+}
+
+/* Facebook - Blue */
+.social-btn.facebook {
+    background: linear-gradient(135deg, #1877f2 0%, #0d5dbd 100%);
+    box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3);
+}
+
+.social-btn.facebook:hover {
+    box-shadow: 0 12px 30px rgba(24, 119, 242, 0.5);
+    border-color: #1877f2;
+}
+
+/* WhatsApp Button - MEGA PROMINENT */
+.whatsapp-btn {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.whatsapp-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.whatsapp-btn:hover::before {
+    width: 400px;
+    height: 400px;
+}
+
+.whatsapp-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(37, 211, 102, 0.6);
+}
+
+.whatsapp-btn .icon {
+    font-size: 1.5rem;
+    z-index: 1;
+}
+
+.whatsapp-btn .text {
+    z-index: 1;
+}
+
+/* Portfolio Button - MEGA PROMINENT */
+.portfolio-btn {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: white;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 10px 30px rgba(255, 0, 51, 0.4);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.portfolio-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.portfolio-btn:hover::before {
+    width: 400px;
+    height: 400px;
+}
+
+.portfolio-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 0, 51, 0.6);
+}
+
+.portfolio-btn .icon {
+    font-size: 1.5rem;
+    z-index: 1;
+}
+
+.portfolio-btn .text {
+    z-index: 1;
+}
+
+/* Floating Social Bar */
+.floating-social {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 999;
+}
+
+.floating-social .social-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .floating-social {
+        right: 1rem;
+    }
+
+    .floating-social .social-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+}

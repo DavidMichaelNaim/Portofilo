@@ -1,0 +1,47 @@
+{
+    "categories": [
+        {
+            "id": "collage",
+            "title": "كولاج"
+        },
+        {
+            "id": "realestate",
+            "title": "عقارات"
+        },
+        {
+            "id": "law",
+            "title": "محاماة"
+        },
+        {
+            "id": "commercial",
+            "title": "إعلانات تجارية"
+        },
+        {
+            "id": "social",
+            "title": "سوشيال ميديا"
+        }
+    ],
+    "items": [
+        {
+            "id": 1,
+            "title": "مشروع عقاري فاخر",
+            "category": "realestate",
+            "image": "imgs/portfolio/placeholder.jpg",
+            "description": "فيديو ترويجي لمشروع سكني في الرياض"
+        },
+        {
+            "id": 2,
+            "title": "إعلان مكتب محاماة",
+            "category": "law",
+            "image": "imgs/portfolio/placeholder.jpg",
+            "description": "موشن جرافيك تعريفي بخدمات قانونية"
+        },
+        {
+            "id": 3,
+            "title": "تصميم كولاج فني",
+            "category": "collage",
+            "image": "imgs/portfolio/placeholder.jpg",
+            "description": "عمل فني بأسلوب الكولاج الرقمي"
+        }
+    ]
+}

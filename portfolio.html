@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>معرض الأعمال | ديفيد مايكل</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Outfit:wght@400;700;900&family=Tajawal:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/social-buttons.css">
+    <link rel="stylesheet" href="css/eve-style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+        /* Portfolio Specific Styles */
+        body {
+            background-color: #050505;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .portfolio-header {
+            text-align: center;
+            padding-top: 150px;
+            padding-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .portfolio-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 0, 51, 0.2);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        .portfolio-card {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            group: cursor;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .card-category {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 0.9rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem 4rem;
+            }
+
+            .portfolio-header {
+                padding-top: 120px;
+            }
+        }
+
+        /* Navbar Fixes for Portfolio Page - FULL INJECTION */
+        .eve-navbar {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            width: auto;
+        }
+
+        .nav-pill {
+            background: rgba(20, 25, 30, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 60px;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.3rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #aaa;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+            background: rgba(255, 0, 51, 0.1);
+        }
+
+        .nav-link.nav-cta {
+            background: var(--accent);
+            color: white;
+            margin-right: 0.3rem;
+        }
+
+        .nav-link.nav-cta:hover {
+            background: #cc0033;
+            transform: scale(1.05);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(20, 25, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 0.8rem;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            margin-right: 15px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .eve-navbar {
+                width: 100%;
+                top: 0;
+                left: 0;
+                transform: none;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 1.5rem;
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent);
+                pointer-events: none;
+            }
+
+            .eve-navbar>* {
+                pointer-events: auto;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+                margin: 0;
+            }
+
+            .nav-pill {
+                position: absolute;
+                top: 70px;
+                right: 1.5rem;
+                flex-direction: column;
+                width: 220px;
+                padding: 1.5rem;
+                border-radius: 20px;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                background: rgba(15, 20, 25, 0.98);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                align-items: stretch;
+            }
+
+            .nav-pill.open {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .nav-link {
+                text-align: center;
+                padding: 0.8rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="dark-theme">
+
+    <!-- Navbar - Eve Kayser Style (Centered Pill) -->
+    <nav class="eve-navbar">
+        <!-- Mobile Menu Button -->
+        <div class="mobile-menu-btn" onclick="document.querySelector('.nav-pill').classList.toggle('open')">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-pill">
+            <a href="index.html" class="nav-link">الرئيسية</a>
+            <a href="index.html#skills" class="nav-link">الخبرة</a>
+            <a href="index.html#contact" class="nav-link">تواصل</a>
+            <a href="portfolio.html" class="nav-link active">أعمالي</a>
+            <a href="index.html#contact" class="nav-link nav-cta">ابدأ مشروعك ↗</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section-padding" style="min-height: 100vh; position: relative;">
+        <!-- Background Grid -->
+        <div class="eve-grid-bg" style="position: fixed; opacity: 0.3;"></div>
+
+        <div class="container" style="position: relative; z-index: 10;">
+
+            <div class="portfolio-header fade-up">
+                <h1 class="portfolio-title">معرض الأعمال</h1>
+                <p style="color: #888; font-size: 1.2rem; max-width: 600px; margin: 0 auto; font-family: 'Tajawal';">
+                    مختارات من أفضل مشاريع الموشن جرافيك والهوية البصرية التي قمت بتنفيذها.
+                </p>
+            </div>
+
+            <!-- Filters -->
+            <div id="filters" class="filter-container fade-up delay-100">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <!-- Categories injected via JS -->
+            </div>
+
+            <!-- Grid -->
+            <div id="portfolio-grid" class="portfolio-grid fade-up delay-200">
+                <!-- Items injected via JS -->
+                <div style="text-align: center; grid-column: 1/-1; padding: 2rem;">
+                    <div style="font-family: 'Cairo'; color: #666; font-size: 1.2rem;">جاري تحميل الأعمال المبدعة...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass"
+        style="margin-top: 0; padding: 2rem; text-align: center; border-top: 1px solid #111; position: relative; z-index: 10; background: #000;">
+        <div class="container">
+            <p style="font-size: 0.9rem; color: #555; font-family: 'Cairo';">© 2026 ديفيد مايكل. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/theme.js"></script>
+    <script src="js/url-params.js"></script>
+    <script src="js/portfolio.js"></script>
+    <script>
+        // Animations Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
