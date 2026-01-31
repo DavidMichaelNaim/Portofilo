@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ` : ''}
                     </div>
                     <div class="card-content">
-                        <div class="card-category">${getCategoryName(item.category)}</div>
+                        <div class="card-category">${getCategoryNames(item.categories || [item.category])}</div>
                         <div class="card-title">${item.title}</div>
                         <p style="color: #aaa; font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">${item.description || ''}</p>
                     </div>
@@ -169,6 +169,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         return cat ? cat.title : catId;
     }
 
+    // Handle multiple categories (new format)
+    function getCategoryNames(categories) {
+        if (!categories || !Array.isArray(categories)) {
+            return getCategoryName(categories);
+        }
+        return categories.map(catId => getCategoryName(catId)).join(' ، ');
+    }
+
+    // Check if item has a specific category
+    function itemHasCategory(item, category) {
+        // Support both old format (item.category) and new format (item.categories)
+        if (item.categories && Array.isArray(item.categories)) {
+            return item.categories.includes(category);
+        }
+        return item.category === category;
+    }
+
     function filterItems(category) {
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.filter === category);
@@ -176,7 +193,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const filtered = (category === 'all')
             ? portfolioData.items
-            : portfolioData.items.filter(item => item.category === category);
+            : portfolioData.items.filter(item => itemHasCategory(item, category));
 
         renderItems(filtered);
 
