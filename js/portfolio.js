@@ -8,9 +8,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. Fetch Data
     let portfolioData = { categories: [], items: [] };
     try {
-        // Slight delay to make skeleton visible for demo/smoothness if needed, 
-        // but fetch is usually fast enough. We call it immediately.
-        const response = await fetch('data/portfolio.json');
+        // Add a small artificial delay (600ms) to ensure the skeleton is visible
+        // even on very fast connections like GitHub Pages.
+        const [response] = await Promise.all([
+            fetch('data/portfolio.json'),
+            new Promise(resolve => setTimeout(resolve, 600))
+        ]);
         portfolioData = await response.json();
     } catch (error) {
         console.error('Error loading portfolio data:', error);

@@ -34,7 +34,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     `).join('');
 
     try {
-        const response = await fetch('data/testimonials.json');
+        const [response] = await Promise.all([
+            fetch('data/testimonials.json'),
+            new Promise(resolve => setTimeout(resolve, 600))
+        ]);
         const testimonials = await response.json();
 
         container.innerHTML = '';
