@@ -74,72 +74,94 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        items.forEach((item, index) => {
-            const card = document.createElement('div');
-            card.className = 'portfolio-card fade-up';
-            card.style.animationDelay = `${index * 50}ms`;
+        const imagePromises = items.map((item, index) => {
+            return new Promise((resolve) => {
+                const card = document.createElement('div');
+                card.className = 'portfolio-card fade-up';
+                card.style.display = 'none'; // Hide initially
+                card.style.animationDelay = `${index * 50}ms`;
 
-            const isVideo = item.type === 'video';
+                const isVideo = item.type === 'video';
 
-            // Auto-convert Google Drive Thumbnail Links (Robust Version)
-            let imageSrc = item.thumbnail || item.image || 'imgs/placeholder.jpg';
-            if (imageSrc) {
-                let driveId = null;
-                if (imageSrc.includes('/d/')) {
-                    driveId = imageSrc.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-                } else if (imageSrc.includes('id=')) {
-                    driveId = imageSrc.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
+                // Auto-convert Google Drive Thumbnail Links
+                let imageSrc = item.thumbnail || item.image || 'imgs/placeholder.jpg';
+                if (imageSrc) {
+                    let driveId = null;
+                    if (imageSrc.includes('/d/')) {
+                        driveId = imageSrc.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+                    } else if (imageSrc.includes('id=')) {
+                        driveId = imageSrc.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
+                    }
+
+                    if (driveId && (imageSrc.includes('google.com') || imageSrc.includes('drive'))) {
+                        imageSrc = `https://lh3.googleusercontent.com/d/${driveId}`;
+                    }
                 }
 
-                if (driveId && (imageSrc.includes('google.com') || imageSrc.includes('drive'))) {
-                    // Use lh3 domain for faster/stable image loading
-                    imageSrc = `https://lh3.googleusercontent.com/d/${driveId}`;
-                }
-            }
-
-            card.innerHTML = `
-                <div class="card-image-wrapper" style="position: relative; cursor: pointer;">
-                    <img src="${imageSrc}" alt="${item.title}" class="card-image">
-                    ${isVideo ? `
-                    <div class="play-icon" style="
-                        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                        width: 60px; height: 60px; background: rgba(255, 0, 51, 0.9);
-                        border-radius: 50%; display: flex; align-items: center; justify-content: center;
-                        box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); pointer-events: none;
-                        transition: transform 0.3s ease;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="margin-left: 4px;">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
+                card.innerHTML = `
+                    <div class="card-image-wrapper" style="position: relative; cursor: pointer;">
+                        <img src="${imageSrc}" alt="${item.title}" class="card-image">
+                        ${isVideo ? `
+                        <div class="play-icon" style="
+                            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                            width: 60px; height: 60px; background: rgba(255, 0, 51, 0.9);
+                            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                            box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); pointer-events: none;
+                            transition: transform 0.3s ease;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="margin-left: 4px;">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                        ` : ''}
                     </div>
-                    ` : ''}
-                </div>
-                <div class="card-content">
-                    <div class="card-category">${getCategoryName(item.category)}</div>
-                    <div class="card-title">${item.title}</div>
-                    <p style="color: #aaa; font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">${item.description || ''}</p>
-                </div>
-            `;
+                    <div class="card-content">
+                        <div class="card-category">${getCategoryName(item.category)}</div>
+                        <div class="card-title">${item.title}</div>
+                        <p style="color: #aaa; font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">${item.description || ''}</p>
+                    </div>
+                `;
 
-            card.querySelector('.card-image-wrapper').onclick = () => openLightbox(item);
-            grid.appendChild(card);
+                const img = card.querySelector('.card-image');
 
-            const wrapper = card.querySelector('.card-image-wrapper');
-            const playIcon = wrapper.querySelector('.play-icon');
-            if (playIcon) {
-                wrapper.onmouseenter = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1.1)';
-                wrapper.onmouseleave = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1)';
-            }
-        });
+                const onImageLoad = () => {
+                    resolve(card);
+                };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
+                if (img.complete) {
+                    onImageLoad();
+                } else {
+                    img.onload = onImageLoad;
+                    img.onerror = onImageLoad; // Don't block if image fails
+                }
+
+                card.querySelector('.card-image-wrapper').onclick = () => openLightbox(item);
+
+                const wrapper = card.querySelector('.card-image-wrapper');
+                const playIcon = wrapper.querySelector('.play-icon');
+                if (playIcon) {
+                    wrapper.onmouseenter = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                    wrapper.onmouseleave = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1)';
                 }
             });
         });
-        grid.querySelectorAll('.portfolio-card').forEach(el => observer.observe(el));
+
+        Promise.all(imagePromises).then((cards) => {
+            grid.innerHTML = ''; // Clear skeletons
+            cards.forEach(card => {
+                card.style.display = 'block';
+                grid.appendChild(card);
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            grid.querySelectorAll('.portfolio-card').forEach(el => observer.observe(el));
+        });
     }
 
     function getCategoryName(catId) {
