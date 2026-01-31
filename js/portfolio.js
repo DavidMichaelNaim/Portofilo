@@ -2,18 +2,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.getElementById('portfolio-grid');
     const filtersContainer = document.getElementById('filters');
 
-    // 4. Show Skeletons during load
-    renderSkeletons(6);
+    // Configuration
+    const ITEMS_PER_BATCH = 6;
+    let currentBatch = 0;
+    let currentItems = [];
+    let isLoading = false;
+
+    // Show initial skeleton
+    renderSkeletons(ITEMS_PER_BATCH);
 
     // 1. Fetch Data
     let portfolioData = { categories: [], items: [] };
     try {
-        // Add a small artificial delay (600ms) to ensure the skeleton is visible
-        // even on very fast connections like GitHub Pages.
-        const [response] = await Promise.all([
-            fetch('data/portfolio.json'),
-            new Promise(resolve => setTimeout(resolve, 600))
-        ]);
+        const response = await fetch('data/portfolio.json');
         portfolioData = await response.json();
     } catch (error) {
         console.error('Error loading portfolio data:', error);
@@ -38,7 +39,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 3. Initial Render
-    renderItems(portfolioData.items);
+    currentItems = portfolioData.items;
+    renderBatch();
 
     // 4. Check URL Params
     const params = new URLSearchParams(window.location.search);
@@ -46,6 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (initialCategory) {
         filterItems(initialCategory);
     }
+
+    // 5. Setup Infinite Scroll
+    setupInfiniteScroll();
 
     // --- Helper Functions ---
 
@@ -67,101 +72,151 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function renderItems(items) {
-        grid.innerHTML = '';
-        if (items.length === 0) {
-            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #888;">لا توجد أعمال في هذا القسم حالياً.</p>';
+    function renderBatch() {
+        const startIdx = currentBatch * ITEMS_PER_BATCH;
+        const endIdx = startIdx + ITEMS_PER_BATCH;
+        const batchItems = currentItems.slice(startIdx, endIdx);
+
+        if (batchItems.length === 0) {
+            if (currentBatch === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #888;">لا توجد أعمال في هذا القسم حالياً.</p>';
+            }
             return;
         }
 
-        const imagePromises = items.map((item, index) => {
-            return new Promise((resolve) => {
-                const card = document.createElement('div');
-                card.className = 'portfolio-card fade-up';
-                card.style.display = 'none'; // Hide initially
-                card.style.animationDelay = `${index * 50}ms`;
+        // Clear skeletons only on first batch
+        if (currentBatch === 0) {
+            grid.innerHTML = '';
+        }
 
-                const isVideo = item.type === 'video';
+        // Remove "load more" indicator if exists
+        const loadingIndicator = grid.querySelector('.loading-indicator');
+        if (loadingIndicator) loadingIndicator.remove();
 
-                // Auto-convert Google Drive Thumbnail Links
-                let imageSrc = item.thumbnail || item.image || 'imgs/placeholder.jpg';
-                if (imageSrc) {
-                    let driveId = null;
-                    if (imageSrc.includes('/d/')) {
-                        driveId = imageSrc.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-                    } else if (imageSrc.includes('id=')) {
-                        driveId = imageSrc.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
-                    }
-
-                    if (driveId && (imageSrc.includes('google.com') || imageSrc.includes('drive'))) {
-                        imageSrc = `https://lh3.googleusercontent.com/d/${driveId}`;
-                    }
-                }
-
-                card.innerHTML = `
-                    <div class="card-image-wrapper" style="position: relative; cursor: pointer;">
-                        <img src="${imageSrc}" alt="${item.title}" class="card-image">
-                        ${isVideo ? `
-                        <div class="play-icon" style="
-                            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                            width: 60px; height: 60px; background: rgba(255, 0, 51, 0.9);
-                            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-                            box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); pointer-events: none;
-                            transition: transform 0.3s ease;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="margin-left: 4px;">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
-                        ` : ''}
-                    </div>
-                    <div class="card-content">
-                        <div class="card-category">${getCategoryNames(item.categories || [item.category])}</div>
-                        <div class="card-title">${item.title}</div>
-                        <p style="color: #aaa; font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">${item.description || ''}</p>
-                    </div>
-                `;
-
-                const img = card.querySelector('.card-image');
-
-                const onImageLoad = () => {
-                    resolve(card);
-                };
-
-                if (img.complete) {
-                    onImageLoad();
-                } else {
-                    img.onload = onImageLoad;
-                    img.onerror = onImageLoad; // Don't block if image fails
-                }
-
-                card.querySelector('.card-image-wrapper').onclick = () => openLightbox(item);
-
-                const wrapper = card.querySelector('.card-image-wrapper');
-                const playIcon = wrapper.querySelector('.play-icon');
-                if (playIcon) {
-                    wrapper.onmouseenter = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1.1)';
-                    wrapper.onmouseleave = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1)';
-                }
-            });
+        batchItems.forEach((item, index) => {
+            renderCard(item, index);
         });
 
-        Promise.all(imagePromises).then((cards) => {
-            grid.innerHTML = ''; // Clear skeletons
-            cards.forEach(card => {
-                card.style.display = 'block';
-                grid.appendChild(card);
-            });
+        currentBatch++;
+        isLoading = false;
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            });
-            grid.querySelectorAll('.portfolio-card').forEach(el => observer.observe(el));
+        // Show "load more" indicator if more items exist
+        if (endIdx < currentItems.length) {
+            showLoadMoreIndicator();
+        }
+    }
+
+    function renderCard(item, batchIndex) {
+        const card = document.createElement('div');
+        card.className = 'portfolio-card fade-up';
+        card.style.animationDelay = `${batchIndex * 80}ms`;
+
+        const isVideo = item.type === 'video';
+
+        // Auto-convert Google Drive Thumbnail Links
+        let imageSrc = item.thumbnail || item.image || 'imgs/placeholder.jpg';
+        if (imageSrc) {
+            let driveId = null;
+            if (imageSrc.includes('/d/')) {
+                driveId = imageSrc.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+            } else if (imageSrc.includes('id=')) {
+                driveId = imageSrc.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
+            }
+
+            if (driveId && (imageSrc.includes('google.com') || imageSrc.includes('drive'))) {
+                imageSrc = `https://lh3.googleusercontent.com/d/${driveId}`;
+            }
+        }
+
+        card.innerHTML = `
+            <div class="card-image-wrapper" style="position: relative; cursor: pointer;">
+                <img src="${imageSrc}" alt="${item.title}" class="card-image" loading="lazy">
+                ${isVideo ? `
+                <div class="play-icon" style="
+                    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                    width: 60px; height: 60px; background: rgba(255, 0, 51, 0.9);
+                    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                    box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); pointer-events: none;
+                    transition: transform 0.3s ease;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="margin-left: 4px;">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+                ` : ''}
+            </div>
+            <div class="card-content">
+                <div class="card-category">${getCategoryNames(item.categories || [item.category])}</div>
+                <div class="card-title">${item.title}</div>
+                <p style="color: #aaa; font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">${item.description || ''}</p>
+            </div>
+        `;
+
+        // Add to grid immediately
+        grid.appendChild(card);
+
+        // Setup lightbox click
+        card.querySelector('.card-image-wrapper').onclick = () => openLightbox(item);
+
+        // Hover effects for play icon
+        const wrapper = card.querySelector('.card-image-wrapper');
+        const playIcon = wrapper.querySelector('.play-icon');
+        if (playIcon) {
+            wrapper.onmouseenter = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            wrapper.onmouseleave = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1)';
+        }
+
+        // Trigger fade-in animation
+        requestAnimationFrame(() => {
+            card.classList.add('visible');
         });
+    }
+
+    function showLoadMoreIndicator() {
+        const indicator = document.createElement('div');
+        indicator.className = 'loading-indicator';
+        indicator.style.cssText = `
+            grid-column: 1/-1; text-align: center; padding: 2rem;
+            color: #666; font-family: 'Cairo', sans-serif;
+        `;
+        indicator.innerHTML = `
+            <div class="loading-spinner" style="
+                width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1);
+                border-top-color: var(--accent); border-radius: 50%;
+                animation: spin 1s linear infinite; margin: 0 auto 1rem;
+            "></div>
+            <span>جاري تحميل المزيد...</span>
+        `;
+        grid.appendChild(indicator);
+
+        // Add spinner keyframes if not exists
+        if (!document.querySelector('#spinner-style')) {
+            const style = document.createElement('style');
+            style.id = 'spinner-style';
+            style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+            document.head.appendChild(style);
+        }
+    }
+
+    function setupInfiniteScroll() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !isLoading) {
+                    const hasMoreItems = currentBatch * ITEMS_PER_BATCH < currentItems.length;
+                    if (hasMoreItems) {
+                        isLoading = true;
+                        // Small delay for smooth experience
+                        setTimeout(() => renderBatch(), 300);
+                    }
+                }
+            });
+        }, { rootMargin: '200px' });
+
+        // Create sentinel element at bottom
+        const sentinel = document.createElement('div');
+        sentinel.id = 'scroll-sentinel';
+        sentinel.style.height = '1px';
+        grid.parentNode.appendChild(sentinel);
+        observer.observe(sentinel);
     }
 
     function getCategoryName(catId) {
@@ -191,12 +246,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.classList.toggle('active', btn.dataset.filter === category);
         });
 
-        const filtered = (category === 'all')
+        // Reset batch counter
+        currentBatch = 0;
+
+        // Filter items
+        currentItems = (category === 'all')
             ? portfolioData.items
             : portfolioData.items.filter(item => itemHasCategory(item, category));
 
-        renderItems(filtered);
+        // Re-render
+        renderBatch();
 
+        // Update URL
         const url = new URL(window.location);
         if (category === 'all') url.searchParams.delete('category');
         else url.searchParams.set('category', category);
