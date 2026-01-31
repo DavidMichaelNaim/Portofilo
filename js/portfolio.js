@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function renderBatch() {
+    async function renderBatch() {
         const startIdx = currentBatch * ITEMS_PER_BATCH;
         const endIdx = startIdx + ITEMS_PER_BATCH;
         const batchItems = currentItems.slice(startIdx, endIdx);
@@ -84,18 +84,42 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Clear skeletons only on first batch
-        if (currentBatch === 0) {
-            grid.innerHTML = '';
-        }
-
         // Remove "load more" indicator if exists
         const loadingIndicator = grid.querySelector('.loading-indicator');
         if (loadingIndicator) loadingIndicator.remove();
 
-        batchItems.forEach((item, index) => {
-            renderCard(item, index);
+        // Create cards with image preloading
+        const cardPromises = batchItems.map((item, index) => {
+            return new Promise((resolve) => {
+                const card = createCard(item, index);
+                const img = card.querySelector('.card-image');
+
+                const showCard = () => {
+                    // Clear skeletons only when first image of first batch is ready
+                    if (currentBatch === 0 && index === 0) {
+                        grid.innerHTML = '';
+                    }
+
+                    grid.appendChild(card);
+
+                    // Trigger fade-in after append
+                    requestAnimationFrame(() => {
+                        card.classList.add('visible');
+                    });
+
+                    resolve();
+                };
+
+                if (img.complete) {
+                    showCard();
+                } else {
+                    img.onload = showCard;
+                    img.onerror = showCard; // Show even if image fails
+                }
+            });
         });
+
+        await Promise.all(cardPromises);
 
         currentBatch++;
         isLoading = false;
@@ -106,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function renderCard(item, batchIndex) {
+    function createCard(item, batchIndex) {
         const card = document.createElement('div');
         card.className = 'portfolio-card fade-up';
         card.style.animationDelay = `${batchIndex * 80}ms`;
@@ -130,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         card.innerHTML = `
             <div class="card-image-wrapper" style="position: relative; cursor: pointer;">
-                <img src="${imageSrc}" alt="${item.title}" class="card-image" loading="lazy">
+                <img src="${imageSrc}" alt="${item.title}" class="card-image">
                 ${isVideo ? `
                 <div class="play-icon" style="
                     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -151,9 +175,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         `;
 
-        // Add to grid immediately
-        grid.appendChild(card);
-
         // Setup lightbox click
         card.querySelector('.card-image-wrapper').onclick = () => openLightbox(item);
 
@@ -165,10 +186,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             wrapper.onmouseleave = () => playIcon.style.transform = 'translate(-50%, -50%) scale(1)';
         }
 
-        // Trigger fade-in animation
-        requestAnimationFrame(() => {
-            card.classList.add('visible');
-        });
+        return card;
     }
 
     function showLoadMoreIndicator() {
