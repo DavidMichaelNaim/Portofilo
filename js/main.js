@@ -22,6 +22,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('testimonials-grid');
     if (!container) return;
 
+    // Show Skeletons
+    container.innerHTML = Array(3).fill(0).map(() => `
+        <div class="glass skeleton-card" style="padding: 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <div class="skeleton" style="width: 40px; height: 40px; border-radius: 50%; margin-bottom: 1.5rem;"></div>
+            <div class="skeleton" style="width: 100%; height: 1rem; margin-bottom: 0.5rem; border-radius: 4px;"></div>
+            <div class="skeleton" style="width: 80%; height: 1rem; margin-bottom: 2rem; border-radius: 4px;"></div>
+            <div class="skeleton" style="width: 120px; height: 1.2rem; margin-bottom: 0.4rem; border-radius: 4px;"></div>
+            <div class="skeleton" style="width: 80px; height: 0.9rem; border-radius: 4px;"></div>
+        </div>
+    `).join('');
+
     try {
         const response = await fetch('data/testimonials.json');
         const testimonials = await response.json();

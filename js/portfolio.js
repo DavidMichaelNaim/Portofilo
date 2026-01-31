@@ -2,9 +2,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.getElementById('portfolio-grid');
     const filtersContainer = document.getElementById('filters');
 
+    // 4. Show Skeletons during load
+    renderSkeletons(6);
+
     // 1. Fetch Data
     let portfolioData = { categories: [], items: [] };
     try {
+        // Slight delay to make skeleton visible for demo/smoothness if needed, 
+        // but fetch is usually fast enough. We call it immediately.
         const response = await fetch('data/portfolio.json');
         portfolioData = await response.json();
     } catch (error) {
@@ -40,6 +45,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- Helper Functions ---
+
+    function renderSkeletons(count) {
+        grid.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            const skeleton = document.createElement('div');
+            skeleton.className = 'portfolio-card skeleton-card';
+            skeleton.innerHTML = `
+                <div class="skeleton-image skeleton"></div>
+                <div class="card-content">
+                    <div class="skeleton-text skeleton" style="width: 30%;"></div>
+                    <div class="skeleton-title skeleton"></div>
+                    <div class="skeleton-desc skeleton"></div>
+                    <div class="skeleton-desc skeleton" style="width: 80%;"></div>
+                </div>
+            `;
+            grid.appendChild(skeleton);
+        }
+    }
 
     function renderItems(items) {
         grid.innerHTML = '';

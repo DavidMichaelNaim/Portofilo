@@ -245,3 +245,51 @@ p {
 }
 
 /* Orange/Blender */
+
+/* --- Skeleton Loading Animation --- */
+.skeleton {
+    animation: skeleton-loading 1.5s infinite linear;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.portfolio-card.skeleton-card {
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.skeleton-text {
+    height: 1rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+    height: 1.5rem;
+    width: 70%;
+    margin-bottom: 0.75rem;
+}
+
+.skeleton-desc {
+    height: 0.9rem;
+    width: 100%;
+    margin-bottom: 0.4rem;
+}
+
+.skeleton-image {
+    width: 100%;
+    aspect-ratio: 16/9;
+}
